@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hierarchical-drl-scheduler
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: scheduler
+          image: hierarchical-drl-scheduler:local
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: "4"
+              memory: "8Gi"
+            limits:
+              cpu: "8"
+              memory: "16Gi"
+          volumeMounts:
+            - name: results
+              mountPath: /output
+      volumes:
+        - name: results
+          hostPath:
+            path: /cluster-results/hierarchical-drl-scheduler
+            type: DirectoryOrCreate
